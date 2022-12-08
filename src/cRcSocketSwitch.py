@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from rpi_rf import RFDevice
+import logging
 
 class RCS1000N:
     '''
@@ -11,12 +12,13 @@ class RCS1000N:
     and uses the library rpi-rf to send the command via 433 MHz send device 
     '''
     
-    def __init__(self, gpio_pin=17):
+    def __init__(self, gpio_pin = 17):
         '''
         Constructor for GPIO Pin and Configuration
         '''
         self.gpio = gpio_pin
         self.config = {'code': None, 'tx_proto': 1, 'tx_pulselength': 320, 'tx_length': 24}
+        logging.info("Brennenstuhl RCS1000 N object created with GPIO pin {}".format(self.gpio))
 
     def prepareCodes(self, SystemCode_raw, ButtonCode_raw, status):
         '''
@@ -30,32 +32,32 @@ class RCS1000N:
             ButtonCode_raw = ButtonCode_raw.upper()
             ButtonCode = button_mapping[ButtonCode_raw]
             ButtonCode = '{:05b}'.format(ButtonCode)
-            #print("Buttoncode: ", ButtonCode, end='\n')
+            logging.info("Buttoncode: {}\n".format(ButtonCode))
         
         # check if the ButtonCode is an integer like 1, 2, 3, etc...
         elif isinstance(ButtonCode_raw, int):
-            #print("ButtonCode_raw is of type int")
+            logging.info("ButtonCode_raw is of type int")
             ButtonCode = '{:05b}'.format(ButtonCode_raw)
-            #print("Buttoncode: ", ButtonCode, end='\n')
+            logging.info("Buttoncode: {}\n".format(ButtonCode))
         
         # assume the code is in the way '01000' check the length (5)
         elif isinstance(ButtonCode_raw, str):
-            #print("ButtonCode_raw is of type str")
+            logging.info("ButtonCode_raw is of type str")
             # check length of 5 
             if len(ButtonCode_raw) == 5:
                 ButtonCode = ButtonCode_raw
-                #print("Buttoncode: ", ButtonCode, ' - ', type(ButtonCode), end='\n')
+                logging.info("Buttoncode: {} - {}\n".format(ButtonCode, type(ButtonCode)))
             else:
                 ButtonCode = None
-                print("ERROR: wrong len of ButtonCode_raw!")
+                logging.error("ERROR: wrong len of ButtonCode_raw!")
         
         # check now the lenght of the SystemCode
         if len(SystemCode_raw) == 5:
             SystemCode = SystemCode_raw
-            #print("SystemCode: ", SystemCode, ' - ', type(SystemCode), end='\n')
+            logging.info("SystemCode: {} - {}\n".format(SystemCode, type(SystemCode)))
         else:
             SystemCode = None
-            print("ERROR: wrong len of SystemCode_raw")
+            logging.error("ERROR: wrong len of SystemCode_raw!")
         
         # check the status
         if isinstance(status, bool):
@@ -114,8 +116,8 @@ class RCS1000N:
                 # bit pattern 11
                 code += 3
             len += 2
-        print("Length of code: ", len, end='\n')
-        print ("code: ", int(code), end='\n')
+        logging.info("Length of code: {}\n".format(len))
+        logging.info("code: {}\n".format(int(code)))
         return code
 
 
@@ -131,10 +133,10 @@ class RCS1000N:
             help += '0F'
         else:
             help += 'F0'
-        print("Py - TriState code: ", help)
+        logging.info("Py - TriState code: {}\n".format(help))
         code = help.replace('0','00').replace('F', '01')
         binstr = '0b' + code
-        #print(binstr)
+        logging.info("binary string: {}\n".format(binstr))
         return int(binstr, 2)
 
     def send(self, systemCode, btn_code, status):
@@ -142,7 +144,7 @@ class RCS1000N:
         Method to prepare the codes and send it to the actuator
         '''
         try:
-            rfdevice = RFDevice(17)
+            rfdevice = RFDevice(self.gpio)
             rfdevice.enable_tx()
             rfdevice.tx_repeat = 10
             values = self.prepareCodes(systemCode, btn_code, status)

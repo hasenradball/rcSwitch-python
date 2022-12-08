@@ -3,6 +3,7 @@
 
 import argparse
 import cRcSocketSwitch
+import time
 import logging
 
 parser = argparse.ArgumentParser(
@@ -22,7 +23,8 @@ parser.add_argument('status', type = int,
 args = parser.parse_args()
 
 parser.parse_args()
-logging.info(args)
+
+logging.warning(args)
 
 # set gpio pin
 gpio_pin = 17
@@ -40,5 +42,10 @@ if __name__ == '__main__':
         obj = cRcSocketSwitch.RCS1000N(gpio_pin)
         # prepare and send values
         obj.send(*values1)
+
+        time.sleep(5)
+
+        obj.send(*values2)
+
     finally:
         pass

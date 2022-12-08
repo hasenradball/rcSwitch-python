@@ -48,6 +48,7 @@ Then install  the library:
 ```
 git clone https://github.com/hasenradball/rcSwitch-python.git
 git checkout develop
+cd rcSwitch-python
 ```
 ---
 ### 2.) Installation of dependencies
@@ -84,6 +85,9 @@ If you have dose this steps, then you should be able to switch the sockets now.
 To Switch the socket you can do this for example via `cli` like:
 
 ```
+# make sure you are in the src folder
+cd /usr/local/bin/python/rcSwitch-python/src
+
 python3 switchSocket <SystemCode> <ButtonCode> <status>
 ```
 This could look like this, if we assume the following codes:</br>
