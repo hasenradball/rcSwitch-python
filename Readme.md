@@ -47,8 +47,8 @@ Then install  the library:
 
 ```
 git clone https://github.com/hasenradball/rcSwitch-python.git
-git checkout develop
 cd rcSwitch-python
+git checkout develop
 ```
 ---
 ### 2.) Installation of dependencies
