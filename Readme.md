@@ -20,7 +20,8 @@ This script is based on the following libraries:
 ## Setting up the Hardware
 - Connect the `VCC-Pin` of the 433 MHz transmitter to any 5 V output pin of your board.</br>
 - The `GND-Pin` to a ground pin.</br>
-- And the `ATAD-Pin` to any `GPIO` pin.</br>
+- And the `ATAD-Pin` or `Data-Pin` to any `GPIO` pin.</br>
+<img src="pics/433MHz_Sender.png" alt="Sender" width="300"/></br>
 In this example, GPIO 17 is used.
 
 It is recommened to connect a (long) cable to the ANT pin of the 433 Mhz transmitter - this extends the range of the sender.
@@ -129,6 +130,13 @@ The user does not belong to the Group of `gpio`.
 Try to run with `sudo`.
 
 ---
+If you want to increase the range of the sender device, there are two possibilities to to that:</br>
+
+- instead of 5 V at `VCC-Pin` you can set up to 12 V to the `VCC-Pin`</br>
+- use a long cable instead of the antenna
+---
+
+
 ### Rasperry Pi GPIO Pins
 </br>
 <img src="pics/pi_gpios.png" alt="GPIOs" width="300"/>
