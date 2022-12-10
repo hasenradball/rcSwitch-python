@@ -95,16 +95,19 @@ This could look like this, if we assume the following codes:</br>
 SystemCode = 10000, ButtonCode = 10000, status = 1
 
 ```
+# using the Button Letter
 python3 ./switchSocket 10000 A 1
 ```
 or this way:
 
 ```
+# usinf the integer ButtonCode
 python3 ./switchSocket 10000 16 1
 ```
 or just like this way:
 
 ```
+# using the binary ButtonCode
 python3 ./switchSocket 10000 10000 1
 ```
 
