@@ -87,28 +87,28 @@ To Switch the socket you can do this for example via `cli` like:
 
 ```
 # make sure you are in the src folder
-cd /usr/local/bin/python/rcSwitch-python/src
+cd /usr/local/bin/python/rcSwitch-python
 
-python3 switchSocket <SystemCode> <ButtonCode> <status>
+python3 ./switchSocket.py <SystemCode> <ButtonCode> <status>
 ```
 This could look like this, if we assume the following codes:</br>
 SystemCode = 10000, ButtonCode = 10000, status = 1
 
 ```
 # using the Button Letter
-python3 ./switchSocket 10000 A 1
+python3 ./switchSocket.py 10000 A 1
 ```
 or this way:
 
 ```
 # usinf the integer ButtonCode
-python3 ./switchSocket 10000 16 1
+python3 ./switchSocket.py 10000 16 1
 ```
 or just like this way:
 
 ```
 # using the binary ButtonCode
-python3 ./switchSocket 10000 10000 1
+python3 ./switchSocket.py 10000 10000 1
 ```
 
 Where the following correlations for the `ButtonCode` can be described:
