@@ -86,7 +86,7 @@ If you have dose this steps, then you should be able to switch the sockets now.
 To Switch the socket you can do this for example via `cli` like:
 
 ```
-# make sure you are in the src folder
+# make sure you are in the folder of the repo
 cd /usr/local/bin/python/rcSwitch-python
 
 python3 ./switchSocket.py <SystemCode> <ButtonCode> <status>
