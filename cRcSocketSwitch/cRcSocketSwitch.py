@@ -4,6 +4,66 @@
 from rpi_rf import RFDevice
 import logging
 
+def sanity_check_Systemcode(SystemCode_raw):
+    '''
+    check is SystemCode has the intented format of str (e.g: '10000')
+    '''
+    # check if SystemCode ist of type str
+    if isinstance(SystemCode_raw, str):
+        # check now the length of the SystemCode
+        if len(SystemCode_raw) == 5:
+            if set(SystemCode_raw) <= {'0','1'}:
+                # check if SystemCode contains only '0' or '1'
+                # SystemCode ok
+                logging.info("SystemCode is ok: {} - {}\n".format(SystemCode_raw, type(SystemCode_raw)))
+                return True
+            else:
+                logging.error("SystemCode is type of str BUT contains NOT only '0' or '1': {} - {}\n".format(SystemCode_raw, type(SystemCode_raw)))
+                return False
+        else:
+            # SystemCode not ok
+            logging.error("SystemCode length is NOT 5: {} - {}\n".format(SystemCode_raw, type(SystemCode_raw)))
+            return False
+    else:
+        logging.error("SystemCode is not a type of str: {} - {}\n".format(SystemCode_raw, type(SystemCode_raw)))
+        return False
+
+
+def sanity_check_Buttoncode(ButtonCode_raw):
+    '''
+    check the intented format of ButtonCode
+    The ButtonCode can have the following formats:
+        - type str like 'a' or 'A'
+        - type str like '10000'
+        - type int like 1, 2, 4, ...etc
+    '''
+    # check if ButtonCode is of type str
+    if ButtonCode_raw in RCS1000N._button_list:
+        # ok fine ButtonCode is type of str like 'A', 'B, etc...
+        logging.info("ButtonCode is ok: {} - {}\n".format(ButtonCode_raw, type(ButtonCode_raw)))
+        return True
+    elif isinstance(ButtonCode_raw, str):
+        if len(ButtonCode_raw) == 5:
+            # check if ButtonCode is like '10000'
+            if set(ButtonCode_raw) <= {'0','1'}:
+                # check if Buttoncode contains only '0' or '1'
+                logging.info("ButtonCode is ok: {} - {}\n".format(ButtonCode_raw, type(ButtonCode_raw)))
+                return True
+            else:
+                logging.error("ButtonCode is type of str BUT contains NOT only '0' or '1': {} - {}\n".format(ButtonCode_raw, type(ButtonCode_raw)))
+                return False
+        else:
+            logging.error("ButtonCode is type of str BUT len i NOT 5: {} - {}\n".format(ButtonCode_raw, type(ButtonCode_raw)))
+            return False
+    elif isinstance(ButtonCode_raw, int) and ButtonCode_raw < 32:
+        # ButtonCode is of type int and has valid value
+        logging.info("ButtonCode is ok: {} - {}\n".format(ButtonCode_raw, type(ButtonCode_raw)))
+        return True
+    else:
+        logging.error("ButtonCode is type of int BUT has wrong value: {} - {}\n".format(ButtonCode_raw, type(ButtonCode_raw)))
+        return False
+
+
 class RCS1000N:
     '''
     class for switching remote socket devices as:
@@ -11,6 +71,8 @@ class RCS1000N:
     I calculated the corresponding send code in decimal value
     and uses the library rpi-rf to send the command via 433 MHz send device 
     '''
+    sanity_check_Systemcode = staticmethod(sanity_check_Systemcode)
+    sanity_check_Buttoncode = staticmethod(sanity_check_Buttoncode)
 
     _button_list = ['a', 'A', 'b', 'B', 'c', 'C', 'd', 'D', 'e', 'E']
     _button_mapping = {'A':16, 'B':8, 'C':4, 'D':2, 'E':1}
@@ -23,66 +85,6 @@ class RCS1000N:
         self.gpio = gpio_pin
         self.config = {'code': None, 'tx_proto': 1, 'tx_pulselength': 320, 'tx_length': 24}
         logging.info("Brennenstuhl RCS1000 N object created with GPIO pin {}".format(self.gpio))
-
-
-    def sanity_check_Systemcode(self, SystemCode_raw):
-        '''
-        check is SystemCode has the intented format of str (e.g: '10000')
-        '''
-        # check if SystemCode ist of type str
-        if isinstance(SystemCode_raw, str):
-            # check now the length of the SystemCode
-            if len(SystemCode_raw) == 5:
-                if set(SystemCode_raw) <= {'0','1'}:
-                    # check if SystemCode contains only '0' or '1'
-                    # SystemCode ok
-                    logging.info("SystemCode is ok: {} - {}\n".format(SystemCode_raw, type(SystemCode_raw)))
-                    return True
-                else:
-                    logging.error("SystemCode is type of str BUT contains NOT only '0' or '1': {} - {}\n".format(SystemCode_raw, type(SystemCode_raw)))
-                    return False
-            else:
-                # SystemCode not ok
-                logging.error("SystemCode length is NOT 5: {} - {}\n".format(SystemCode_raw, type(SystemCode_raw)))
-                return False
-        else:
-            logging.error("SystemCode is not a type of str: {} - {}\n".format(SystemCode_raw, type(SystemCode_raw)))
-            return False
-
-
-    def sanity_check_Buttoncode(self, ButtonCode_raw):
-        '''
-        check the intented format of ButtonCode
-        The ButtonCode can have the following formats:
-            - type str like 'a' or 'A'
-            - type str like '10000'
-            - type int like 1, 2, 4, ...etc
-        '''
-        # check if ButtonCode is of type str
-        if ButtonCode_raw in self._button_list:
-            # ok fine ButtonCode is type of str like 'A', 'B, etc...
-            logging.info("ButtonCode is ok: {} - {}\n".format(ButtonCode_raw, type(ButtonCode_raw)))
-            return True
-        elif isinstance(ButtonCode_raw, str):
-            if len(ButtonCode_raw) == 5:
-                # check if ButtonCode is like '10000'
-                if set(ButtonCode_raw) <= {'0','1'}:
-                    # check if Buttoncode contains only '0' or '1'
-                    logging.info("ButtonCode is ok: {} - {}\n".format(ButtonCode_raw, type(ButtonCode_raw)))
-                    return True
-                else:
-                    logging.error("ButtonCode is type of str BUT contains NOT only '0' or '1': {} - {}\n".format(ButtonCode_raw, type(ButtonCode_raw)))
-                    return False
-            else:
-                logging.error("ButtonCode is type of str BUT len i NOT 5: {} - {}\n".format(ButtonCode_raw, type(ButtonCode_raw)))
-                return False
-        elif isinstance(ButtonCode_raw, int) and ButtonCode_raw < 32:
-            # ButtonCode is of type int and has valid value
-            logging.info("ButtonCode is ok: {} - {}\n".format(ButtonCode_raw, type(ButtonCode_raw)))
-            return True
-        else:
-            logging.error("ButtonCode is type of int BUT has wrong value: {} - {}\n".format(ButtonCode_raw, type(ButtonCode_raw)))
-            return False
 
 
     def prepareCodes(self, SystemCode_raw, ButtonCode_raw, status):
