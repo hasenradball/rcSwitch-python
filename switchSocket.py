@@ -38,6 +38,8 @@ if __name__ == '__main__':
     try:
         # create Brennenstuhl RCS1000N object 
         obj = cRcSocketSwitch.RCS1000N(gpio_pin)
+        #obj.sanity_check_Systemcode('10000')
+        #obj.sanity_check_Buttoncode(32)
         # prepare and send values
         obj.send(*values1)
     finally:
