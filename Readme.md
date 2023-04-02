@@ -42,6 +42,8 @@ Create the dir `python`:
 ```
 cd /usr/local/bin
 sudo mkdir python
+# change owner to new folder to user
+sudo chown -cR $USER:$USER /user/local/bin/python
 cd python
 ```
 Then install  the library:
@@ -49,6 +51,7 @@ Then install  the library:
 ```
 git clone https://github.com/hasenradball/rcSwitch-python.git
 cd rcSwitch-python
+# if you want to work on develop
 git checkout develop
 ```
 ---
