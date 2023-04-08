@@ -40,12 +40,12 @@ if __name__ == '__main__':
     try:
         # create Brennenstuhl RCS1000N object 
         obj = cRcSocketSwitch.RCS1000N(gpio_pin)
+    except Exception as err:
+        logging.error("Error during instantiation of RCS1000N: ", err)
+    else:
         # prepare and send values
         obj.send(*values1)
-
         time.sleep(5)
-
         obj.send(*values2)
-
     finally:
         pass
